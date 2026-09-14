@@ -9,9 +9,7 @@ module multiplier_control (
     output logic compute_en   // Executa uma iteração (add condicional + shift)
 );
 
-    // -------------------------------------------------------------------
     // 1. Definição dos Estados (Codificação One-Hot com atributo de síntese)
-    // -------------------------------------------------------------------
     typedef enum logic [3:0] {
         ST_IDLE    = 4'b0001,
         ST_LOAD    = 4'b0010,
@@ -21,18 +19,14 @@ module multiplier_control (
 
     (* fsm_encoding = "one_hot" *) state_t current_state, next_state;
 
-    // -------------------------------------------------------------------
     // 2. Contador Interno de Iterações (0 a 31)
-    // -------------------------------------------------------------------
     logic [4:0] count;
     logic       count_max;
 
     // Flag limpa para indicar a última iteração do multiplicador (32ª iteração)
     assign count_max = (count == 5'd31);
 
-    // -------------------------------------------------------------------
     // 3. Lógica Sequencial: Registrador de Estado e Contador
-    // -------------------------------------------------------------------
     always_ff @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             current_state <= ST_IDLE;
@@ -48,9 +42,7 @@ module multiplier_control (
         end
     end
 
-    // -------------------------------------------------------------------
     // 4. Lógica Combinacional: Próximo Estado e Saídas de Moore
-    // -------------------------------------------------------------------
     always_comb begin
         // Valores default para prevenção rigorosa de latches inferidos
         next_state  = current_state;
